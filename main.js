@@ -14,10 +14,10 @@ let map = L.map("map").setView([
 
 //Thematische Layer
 let themaLayer = {
-    stops: L.featureGroup(),
-    lines: L.featureGroup(),
-    zones: L.featureGroup(),
-    sites: L.featureGroup()
+    stops: L.featureGroup().addTo(map),
+    lines: L.featureGroup().addTo(map),
+    zones: L.featureGroup().addTo(map),
+    sites: L.featureGroup().addTo(map)
 }
 
 // Hintergrundlayer
@@ -45,8 +45,8 @@ L.control.scale({
 async function showStops(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
-    L.geoJSON(jsondata).addTo(map);
     console.log(response, jsondata);
+    L.geoJSON(jsondata).addTo(themaLayer.stops);   
 }
 showStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json");
 
@@ -54,8 +54,8 @@ showStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&vers
 async function showLines(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
-    L.geoJSON(jsondata).addTo(map);
     console.log(response, jsondata);
+    L.geoJSON(jsondata).addTo(themaLayer.lines);
 }
 showLines("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKLINIEVSLOGD&srsName=EPSG:4326&outputFormat=json");
 
@@ -63,8 +63,8 @@ showLines("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&vers
 async function showZones(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
-    L.geoJSON(jsondata).addTo(map);
     console.log(response, jsondata);
+    L.geoJSON(jsondata).addTo(themaLayer.zones);
 }
 showZones("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:FUSSGEHERZONEOGD&srsName=EPSG:4326&outputFormat=json");
 
@@ -72,7 +72,7 @@ showZones("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&vers
 async function showSites(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
-    L.geoJSON(jsondata).addTo(map);
     console.log(response, jsondata);
+    L.geoJSON(jsondata).addTo(themaLayer.sites);
 }
 showSites("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:SEHENSWUERDIGOGD&srsName=EPSG:4326&outputFormat=json");
