@@ -7,13 +7,12 @@ let stephansdom = {
     title: "Stephansdom"
 };
 
-// Karte initialisieren
-let map = L.map("map").setView([
+// Karte initialisieren mit Fullscreen Control
+let map = L.map("map", {
+    fullscreenControl: true
+}).setView([
     stephansdom.lat, stephansdom.lng
 ], 12);
-
-//FullScreen Plugin
-map.addControl(new L.Control.Fullscreen());
 
 //Thematische Layer
 let themaLayer = {
