@@ -16,8 +16,8 @@ let map = L.map("map").setView([
 let themaLayer = {
     stops: L.featureGroup(),
     lines: L.featureGroup(),
-    zones: L.featureGroup(),
-    sites: L.featureGroup().addTo(map)
+    zones: L.featureGroup().addTo(map),
+    sites: L.featureGroup()
 }
 
 // Hintergrundlayer
@@ -30,7 +30,7 @@ let layerControl = L.control.layers({
     "BasemapAT Orthofoto": L.tileLayer.provider("BasemapAT.orthofoto"),
     "BasemapAT Beschriftung": L.tileLayer.provider("BasemapAT.overlay")
 }, {
-    "Vienna Sightseeing Haltestellen" : themaLayer.stops, 
+    "Vienna Sightseeing Haltestellen": themaLayer.stops, 
     "Vienna Sightseeing Linien": themaLayer.lines,
     "Fußgängerzonen": themaLayer.zones,
     "Sehenswürdigkeiten": themaLayer.sites
@@ -64,7 +64,16 @@ async function showZones(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
     //console.log(response, jsondata);
-    L.geoJSON(jsondata).addTo(themaLayer.zones);
+    L.geoJSON(jsondata, {
+        onEachFeature: function(feature, layer) {
+            let prop = feature.properties;
+            layer.bindPopup(`
+            <h4>Fußgängerzone ${prop.ADRESSE}</h4>
+            <p><i class="fa-sharp fa-solid fa-clock"></i> ${prop.ZEITRAUM}</p>
+            <p><i class="fa-sharp fa-solid fa-circle-info"></i> ${prop.AUSN_TEXT}</p>
+            `)
+        }
+    }).addTo(themaLayer.zones);
 }
 showZones("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:FUSSGEHERZONEOGD&srsName=EPSG:4326&outputFormat=json");
 
