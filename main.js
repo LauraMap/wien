@@ -15,8 +15,8 @@ let map = L.map("map").setView([
 //Thematische Layer
 let themaLayer = {
     stops: L.featureGroup(),
-    lines: L.featureGroup(),
-    zones: L.featureGroup().addTo(map),
+    lines: L.featureGroup().addTo(map),
+    zones: L.featureGroup(),
     sites: L.featureGroup()
 }
 
@@ -55,7 +55,17 @@ async function showLines(url) {
     let response = await fetch(url);
     let jsondata = await response.json();
     //console.log(response, jsondata);
-    L.geoJSON(jsondata).addTo(themaLayer.lines);
+    L.geoJSON(jsondata, {
+        onEachFeature: function(feature, layer) {
+            let prop = feature.properties;
+            layer.bindPopup(`
+            <h4><i class="fa-sharp fa-solid fa-bus"></i> ${prop.LINE_NAME}</h4>
+            <p><i class="fa-sharp fa-regular fa-circle-stop"></i> ${prop.FROM_NAME}<br>
+            <i class="fa-sharp fa-solid fa-down-long"></i><br>
+            <i class="fa-sharp fa-regular fa-circle-stop"></i> ${prop.TO_NAME}</p>
+            `)
+        }
+    }).addTo(themaLayer.lines);
 }
 showLines("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKLINIEVSLOGD&srsName=EPSG:4326&outputFormat=json");
 
