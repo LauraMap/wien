@@ -49,6 +49,16 @@ async function showStops(url) {
     let jsondata = await response.json();
     //console.log(response, jsondata);
     L.geoJSON(jsondata, {
+        pointToLayer: function(feature, latlng) {
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: `icons/bus_${feature.properties.LINE_ID}.png`,
+                    iconAnchor: [16, 37],
+                    popupAnchor: [0, -37],
+                })
+            }
+            );
+        },
         onEachFeature: function (feature, layer) {
             let prop = feature.properties;
             layer.bindPopup(`
@@ -71,7 +81,7 @@ async function showLines(url) {
         "3": "#0074D9", //Blue Line
         "4": "#2ECC40", //Green Line
         "5": "#AAAAAA", //Grey Line
-        "6": "FF851B" //Orange Line
+        "6": "#FF851B" //Orange Line
     }
     //console.log(response, jsondata);
     L.geoJSON(jsondata, {
