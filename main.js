@@ -17,8 +17,8 @@ let map = L.map("map", {
 //Thematische Layer
 let themaLayer = {
     stops: L.featureGroup(),
-    lines: L.featureGroup().addTo(map),
-    zones: L.featureGroup(),
+    lines: L.featureGroup(),
+    zones: L.featureGroup().addTo(map),
     sites: L.featureGroup()
 }
 
@@ -32,7 +32,7 @@ let layerControl = L.control.layers({
     "BasemapAT Orthofoto": L.tileLayer.provider("BasemapAT.orthofoto"),
     "BasemapAT Beschriftung": L.tileLayer.provider("BasemapAT.overlay")
 }, {
-    "Vienna Sightseeing Haltestellen": themaLayer.stops, 
+    "Vienna Sightseeing Haltestellen": themaLayer.stops,
     "Vienna Sightseeing Linien": themaLayer.lines,
     "Fußgängerzonen": themaLayer.zones,
     "Sehenswürdigkeiten": themaLayer.sites
@@ -49,14 +49,14 @@ async function showStops(url) {
     let jsondata = await response.json();
     //console.log(response, jsondata);
     L.geoJSON(jsondata, {
-        onEachFeature: function(feature, layer) {
+        onEachFeature: function (feature, layer) {
             let prop = feature.properties;
             layer.bindPopup(`
             <h4><i class="fa-sharp fa-solid fa-bus"></i> ${prop.LINE_NAME}</h4>
             <p>${prop.STAT_ID} ${prop.STAT_NAME}</p>
             `)
         }
-    }).addTo(themaLayer.stops);   
+    }).addTo(themaLayer.stops);
 }
 showStops("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:TOURISTIKHTSVSLOGD&srsName=EPSG:4326&outputFormat=json");
 
@@ -76,13 +76,13 @@ async function showLines(url) {
     //console.log(response, jsondata);
     L.geoJSON(jsondata, {
         style: function (feature) {
-        return {
-            color: lineColors[feature.properties.LINE_ID],
-            weight: 3,
-            dashArray: [10, 4]
-    };
-    },
-        onEachFeature: function(feature, layer) {
+            return {
+                color: lineColors[feature.properties.LINE_ID],
+                weight: 3,
+                dashArray: [10, 4]
+            };
+        },
+        onEachFeature: function (feature, layer) {
             let prop = feature.properties;
             layer.bindPopup(`
             <h4><i class="fa-sharp fa-solid fa-bus"></i> ${prop.LINE_NAME}</h4>
@@ -103,7 +103,15 @@ async function showZones(url) {
     let jsondata = await response.json();
     //console.log(response, jsondata);
     L.geoJSON(jsondata, {
-        onEachFeature: function(feature, layer) {
+        style: function (feature) {
+            return {
+                color: "#F012BE",
+                weight: 1,
+                fillOpacity: 0.1,
+                opacity: 0.4
+            };
+        },
+        onEachFeature: function (feature, layer) {
             let prop = feature.properties;
             layer.bindPopup(`
             <h4>Fußgängerzone ${prop.ADRESSE}</h4>
@@ -121,7 +129,7 @@ async function showSites(url) {
     let jsondata = await response.json();
     //console.log(response, jsondata);
     L.geoJSON(jsondata, {
-        onEachFeature: function(feature, layer) {
+        onEachFeature: function (feature, layer) {
             let prop = feature.properties;
             layer.bindPopup(`
             <img src="${prop.THUMBNAIL}" alt="*">    
