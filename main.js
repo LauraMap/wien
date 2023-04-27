@@ -18,8 +18,8 @@ let map = L.map("map", {
 let themaLayer = {
     stops: L.featureGroup(),
     lines: L.featureGroup(),
-    zones: L.featureGroup().addTo(map),
-    sites: L.featureGroup()
+    zones: L.featureGroup(),
+    sites: L.featureGroup().addTo(map)
 }
 
 // Hintergrundlayer
@@ -91,7 +91,7 @@ async function showLines(url) {
             <i class="fa-sharp fa-regular fa-circle-stop"></i> ${prop.TO_NAME}</p>
             `);
             lineNames[prop.LINE_ID] = prop.LINE_NAME;
-            console.log(lineNames)
+            //console.log(lineNames)
         }
     }).addTo(themaLayer.lines);
 }
@@ -129,6 +129,17 @@ async function showSites(url) {
     let jsondata = await response.json();
     //console.log(response, jsondata);
     L.geoJSON(jsondata, {
+        pointToLayer: function(feature, latlng) {
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: 'icons/photo.png',
+                    iconSize: [32, 37],
+                    iconAnchor: [16, 37],
+                    popupAnchor: [0, -37],
+                })
+            }
+            );
+        },
         onEachFeature: function (feature, layer) {
             let prop = feature.properties;
             layer.bindPopup(`
