@@ -172,11 +172,24 @@ async function showHotels(url) {
     //console.log(response, jsondata);
     L.geoJSON(jsondata, {
         pointToLayer: function(feature, latlng) {
+            if (feature.properties.KATEGORIE_TXT === "1*") {
+                icon = "icons/hotel_1star.png"
+            } else if (feature.properties.KATEGORIE_TXT === "2*") {
+                icon = "icons/hotel_2stars.png"
+            } else if (feature.properties.KATEGORIE_TXT === "3*") {
+                icon = "icons/hotel_3stars.png"
+            } else if (feature.properties.KATEGORIE_TXT === "4*") {
+                icon = "icons/hotel_4stars.png"
+            } else if (feature.properties.KATEGORIE_TXT === "5*") {
+                icon = "icons/hotel_5stars.png"
+            } else {
+                icon = "icons/hotel.png"
+            }
             return L.marker(latlng, {
-                icon: L.icon({
-                    iconUrl: 'icons/hotel.png',
-                    iconAnchor: [16, 37],
-                    popupAnchor: [0, -37],
+                    icon: L.icon({
+                        iconUrl : icon,
+                        iconAnchor: [16, 37],
+                        popupAnchor: [0, -37],
                 })
             }
             );
@@ -197,10 +210,3 @@ async function showHotels(url) {
     }).addTo(themaLayer.hotels);
 }
 showHotels("https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:UNTERKUNFTOGD&srsName=EPSG:4326&outputFormat=json")
-
-
-if (prop.KATEGORIE == "3§") {
-    icon = "icons/hotel_3star"
-} else if () {
-
-} else if () 
