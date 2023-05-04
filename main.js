@@ -7,7 +7,7 @@ let stephansdom = {
     title: "Stephansdom"
 };
 
-// Karte initialisieren mit Fullscreen Control
+// Karte initialisieren mit Fullscreen Control (Leaflet)
 let map = L.map("map", {
     fullscreenControl: true
 }).setView([
@@ -53,6 +53,7 @@ async function showStops(url) {
     L.geoJSON(jsondata, {
         pointToLayer: function(feature, latlng) {
             return L.marker(latlng, {
+                // icons von https://mapicons.mapsmarker.com/markers/
                 icon: L.icon({
                     iconUrl: `icons/bus_${feature.properties.LINE_ID}.png`,
                     iconAnchor: [16, 37],
