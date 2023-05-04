@@ -14,6 +14,9 @@ let map = L.map("map", {
     stephansdom.lat, stephansdom.lng
 ], 15);
 
+// Leaflet hash linkable location hashes
+new L.Hash(map);
+
 //Thematische Layer
 let themaLayer = {
     stops: L.featureGroup().addTo(map),
