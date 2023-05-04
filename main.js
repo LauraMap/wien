@@ -17,6 +17,12 @@ let map = L.map("map", {
 // Leaflet hash linkable location hashes
 new L.Hash(map);
 
+// Leaflet Minimap
+let miniMap = new L.Control.MiniMap(L.tileLayer.provider("BasemapAT.grau"), {
+    toggleDisplay : true,
+    minimized : true
+}).addTo(map);
+
 //Thematische Layer
 let themaLayer = {
     stops: L.featureGroup().addTo(map),
